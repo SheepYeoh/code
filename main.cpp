@@ -19,8 +19,8 @@ float leftWeaponAngleX = 1.0f;
 float leftWeaponAngleY = 0.0f;
 float leftWeaponAngleZ = 0.0f;
 float leftWeaponTranslateX = -1.5f;
-float leftWeaponTranslateY = 1.8f;
-float leftWeaponTranslateZ = 3.5f;
+float leftWeaponTranslateY = 2.5f;
+float leftWeaponTranslateZ = -0.5f;
 
 //rightWeapon
 float rightWeaponAngle = -60.0f;
@@ -28,8 +28,10 @@ float rightWeaponAngleX = 1.0f;
 float rightWeaponAngleY = 0.0f;
 float rightWeaponAngleZ = 0.0f;
 float rightWeaponTranslateX = 1.5f;
-float rightWeaponTranslateY = 1.8f;
-float rightWeaponTranslateZ = 3.5f;
+float rightWeaponTranslateY = 2.5f;
+float rightWeaponTranslateZ = -0.5f;
+
+double rotateCam = 0;
 
 LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -41,11 +43,13 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 
 	case WM_KEYDOWN:
 		if (wParam == VK_LEFT) {
-
+			rotateCam -= 20;
 		}
 		else if (wParam == VK_RIGHT) {
+			rotateCam += 20;
 
 		}
+
 		else if (wParam == VK_DOWN) {
 
 		}
@@ -123,7 +127,7 @@ void cylinder(float topRadius, float btmRadius, float height) {
 	gluDeleteQuadric(cylinder);
 
 	glBegin(GL_TRIANGLE_FAN);
-	glVertex2f(x1,y1);
+	glVertex2f(x1, y1);
 	for (angle = 1.0f; angle <= 360.0f; angle += 0.2f) {
 		x2 = x1 + sin(angle)*topRadius;
 		y2 = y1 + cos(angle)*topRadius;
@@ -131,7 +135,6 @@ void cylinder(float topRadius, float btmRadius, float height) {
 	}
 	glEnd();
 
-	glPushMatrix();
 	glTranslatef(0.0f,0.0f,height);
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex2f(x1, y1);
@@ -141,7 +144,6 @@ void cylinder(float topRadius, float btmRadius, float height) {
 		glVertex2f(x2, y2);
 	}
 	glEnd();
-	glPopMatrix();
 }
 
 void sphere(float radius) {
@@ -319,23 +321,19 @@ void cube(float maxHeight, float maxWidth, float maxLength, const char bitmap[])
 
 void leftWeapon() {
 	glPushMatrix();
-	glRotatef(leftWeaponAngle, leftWeaponAngleX, leftWeaponAngleY, leftWeaponAngleZ);
+
 	glTranslatef(leftWeaponTranslateX, leftWeaponTranslateY, leftWeaponTranslateZ);
+	glRotatef(leftWeaponAngle, leftWeaponAngleX, leftWeaponAngleY, leftWeaponAngleZ);
 
 	glPushMatrix();
-	glTranslatef(0.0f, 0.0f, -1.8f);
+
 	glColor3f(192/255.0, 192 / 255.0, 192 / 255.0);
 	cylinder(0.3, 0.3, 1.8);
-	glPopMatrix();
 
-
-	glRotatef(-60.0f, 1, 0, 0);
-	glTranslatef(-1.5f, 1.8f, 3.5f);
-	glPushMatrix();
-	glTranslatef(0.0f, 0.0f, 0.0f);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.5, 0.5, 0.7);
 	glPopMatrix();
+
 
 	glPopMatrix();
 }
@@ -344,18 +342,14 @@ void leftWeapon() {
 void rightWeapon() {
 	glPushMatrix();
 
-	glRotatef(rightWeaponAngle, rightWeaponAngleX, rightWeaponAngleY, rightWeaponAngleZ);
 	glTranslatef(rightWeaponTranslateX, rightWeaponTranslateY, rightWeaponTranslateZ);
+	glRotatef(rightWeaponAngle, rightWeaponAngleX, rightWeaponAngleY, rightWeaponAngleZ);
 
 	glPushMatrix();
-	glTranslatef(0.0f, 0.0f, -1.8f);
+
 	glColor3f(192 / 255.0, 192 / 255.0, 192 / 255.0);
 	cylinder(0.3, 0.3, 1.8);
-	glPopMatrix();
 
-
-	glPushMatrix();
-	glTranslatef(0.0f, 0.0f, 0.0f);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.5, 0.5, 0.7);
 	glPopMatrix();
@@ -553,9 +547,12 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
-	glRotatef(0.5f, 0, 1, 0);
+
+
 	glPushMatrix();
 
+	glRotatef(rotateCam, 0, 1, 0);
+	glPushMatrix();
 	leftWeapon();
 	rightWeapon();
 	head();
@@ -565,6 +562,9 @@ void display()
 	leftLeg();
 	rightLeg();
 	glPopMatrix();
+	glPopMatrix();
+
+
 }
 //--------------------------------------------------------------------
 
