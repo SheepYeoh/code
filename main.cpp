@@ -15,9 +15,9 @@ HBITMAP hBMP = NULL;
 GLUquadricObj *var = NULL;
 GLuint* textures = new GLuint[4];
 BITMAP image[4];
-float cc = -0.1;
+float shoot = -0.1;
 //leftWeapon
-float leftWeaponAngle = -60.0f;
+float leftWeaponAngle = -40.0f;
 float leftWeaponAngleX = 1.0f;
 float leftWeaponAngleY = 0.0f;
 float leftWeaponAngleZ = 0.0f;
@@ -26,7 +26,7 @@ float leftWeaponTranslateY = 2.5f;
 float leftWeaponTranslateZ = -0.5f;
 
 //rightWeapon
-float rightWeaponAngle = -60.0f;
+float rightWeaponAngle = -40.0f;
 float rightWeaponAngleX = 1.0f;
 float rightWeaponAngleY = 0.0f;
 float rightWeaponAngleZ = 0.0f;
@@ -551,12 +551,11 @@ void head() {
 	glPopMatrix();
 }
 
-void missile() {
+void leftMissile() {
 
 	glPushMatrix();
 
-	glRotatef(-45.0f,1,0,0);
-	glColor3f(0, 150 / 255.0, 45 / 1);
+	glRotatef(-45.0f, 1, 0, 0);
 	var = gluNewQuadric();
 	gluQuadricDrawStyle(var, GLU_FILL);
 
@@ -576,8 +575,8 @@ void missile() {
 	//missile cone
 	glPushMatrix();
 	glRotatef(45, 1, 0, 0);
-	glTranslatef(0, 0, -0.7);
-	gluCylinder(var, 0.001, 0.5, 0.7, 20, 20);
+	glTranslatef(-1.5, -2.2, -0.7);
+	gluCylinder(var, 0.001, 0.2, 0.7, 20, 20);
 	glPopMatrix();
 
 
@@ -597,14 +596,14 @@ void missile() {
 	//missile cylinder
 	glPushMatrix();
 	glRotatef(-135, 1, 0, 0);
-	glTranslatef(0, 0, -2);
-	gluCylinder(var, 0.5, 0.5, 2, 20, 20);
+	glTranslatef(-1.5, 2.2, -2);
+	gluCylinder(var, 0.2, 0.2, 2, 20, 20);
 	glPopMatrix();
 
 	glPushMatrix();
 	glRotatef(-135, 1, 0, 0);
-	glTranslatef(0, 0, -2);
-	gluSphere(var, 0.5, 20, 20);
+	glTranslatef(-1.5, 2.2, -2);
+	gluSphere(var, 0.2, 20, 20);
 	glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
@@ -614,6 +613,67 @@ void missile() {
 	glPopMatrix();
 }
 
+void rightMissile() {
+
+	glPushMatrix();
+
+	glRotatef(-45.0f, 1, 0, 0);
+	var = gluNewQuadric();
+	gluQuadricDrawStyle(var, GLU_FILL);
+
+	//texture missile cone
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	HBITMAP hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "grey.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	gluQuadricTexture(var, GL_TRUE);
+
+	//missile cone
+	glPushMatrix();
+	glRotatef(45, 1, 0, 0);
+	glTranslatef(1.5, -2.2, -0.7);
+	gluCylinder(var, 0.001, 0.2, 0.7, 20, 20);
+	glPopMatrix();
+
+
+	//texture missile cylinder
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "blue.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	gluQuadricTexture(var, GL_TRUE);
+
+	//missile cylinder
+	glPushMatrix();
+	glRotatef(-135, 1, 0, 0);
+	glTranslatef(1.5, 2.2, -2);
+	gluCylinder(var, 0.2, 0.2, 2, 20, 20);
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(-135, 1, 0, 0);
+	glTranslatef(1.5, 2.2, -2);
+	gluSphere(var, 0.2, 20, 20);
+	glPopMatrix();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+
+	glPopMatrix();
+}
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -634,18 +694,18 @@ void display()
 
 	glPushMatrix();
 	if (x) {
-		glRotatef(135.0f, 1, 0, 0);
-		//glRotatef(180.0f,0,1,0);
-		glTranslatef(0.0f, 0.0f, cc);
-		missile();
-		cc -= 0.03;
+		glRotatef(140.0f, 1, 0, 0);
+		glTranslatef(0.0f, 0.0f, shoot);
+		leftMissile();
+		rightMissile();
+		shoot -= 0.2;
 	}
 	else {
-		glRotatef(135.0f, 1, 0, 0);
-		//glRotatef(180.0f, 0, 1, 0);
-		missile();
+		glRotatef(140.0f, 1, 0, 0);
+		leftMissile();
+		rightMissile();
 		glLoadIdentity();
-		cc = -0.1;
+		shoot = -0.1;
 	}
 	glPopMatrix();
 
