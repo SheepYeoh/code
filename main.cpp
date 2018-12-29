@@ -556,6 +556,7 @@ void missile() {
 	glPushMatrix();
 
 	glRotatef(-45.0f,1,0,0);
+	glColor3f(0, 150 / 255.0, 45 / 1);
 	var = gluNewQuadric();
 	gluQuadricDrawStyle(var, GLU_FILL);
 
@@ -621,23 +622,27 @@ void display()
 	glPushMatrix();
 	glRotatef(rotateCam, 0, 1, 0);
 	glPushMatrix();
-	/*leftWeapon();
+	leftWeapon();
 	rightWeapon();
 	head();
 	body();
 	leftHand();
 	rightHand();
 	leftLeg();
-	rightLeg();*/
+	rightLeg();
 	glPopMatrix();
 
 	glPushMatrix();
 	if (x) {
+		glRotatef(135.0f, 1, 0, 0);
+		//glRotatef(180.0f,0,1,0);
 		glTranslatef(0.0f, 0.0f, cc);
 		missile();
 		cc -= 0.03;
 	}
 	else {
+		glRotatef(135.0f, 1, 0, 0);
+		//glRotatef(180.0f, 0, 1, 0);
 		missile();
 		glLoadIdentity();
 		cc = -0.1;
