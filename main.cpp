@@ -15,7 +15,7 @@ HBITMAP hBMP = NULL;
 GLUquadricObj *var = NULL;
 GLuint* textures = new GLuint[4];
 BITMAP image[4];
-
+float cc = -0.1;
 //leftWeapon
 float leftWeaponAngle = -60.0f;
 float leftWeaponAngleX = 1.0f;
@@ -552,6 +552,8 @@ void head() {
 }
 
 void missile() {
+	var = gluNewQuadric();
+	gluQuadricDrawStyle(var, GLU_FILL);
 
 	//texture missile cone
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
@@ -570,8 +572,7 @@ void missile() {
 	glPushMatrix();
 	glRotatef(45, 1, 0, 0);
 	glTranslatef(0, 0, -0.7);
-	cylinder(0.001,0.5,0.7);
-	//gluCylinder(var, 0.001, 0.5, 0.7, 20, 20);
+	gluCylinder(var, 0.001, 0.5, 0.7, 20, 20);
 	glPopMatrix();
 
 
@@ -614,31 +615,29 @@ void display()
 	glPushMatrix();
 	glRotatef(rotateCam, 0, 1, 0);
 	glPushMatrix();
-	//leftWeapon();
-	//rightWeapon();
-
-	//
-
-	//head();
-	//body();
-	//leftHand();
-	//rightHand();
-	//leftLeg();
-	//rightLeg();
-	missile();
+	/*leftWeapon();
+	rightWeapon();
+	head();
+	body();
+	leftHand();
+	rightHand();
+	leftLeg();
+	rightLeg();*/
 	glPopMatrix();
-	glPopMatrix();
-	
-	
-	/*
+
+	glPushMatrix();
 	if (x) {
-		glTranslatef(0.0f, 0.1, -0.1);
-
+		glTranslatef(0.0f, 0.0f, cc);
+		missile();
+		cc -= 0.03;
 	}
 	else {
+		missile();
 		glLoadIdentity();
-	}*/
+	}
+	glPopMatrix();
 
+	glPopMatrix();
 
 }
 //--------------------------------------------------------------------
