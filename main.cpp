@@ -552,6 +552,10 @@ void head() {
 }
 
 void missile() {
+
+	glPushMatrix();
+
+	glRotatef(-45.0f,1,0,0);
 	var = gluNewQuadric();
 	gluQuadricDrawStyle(var, GLU_FILL);
 
@@ -605,6 +609,8 @@ void missile() {
 	glDisable(GL_TEXTURE_2D);
 	DeleteObject(hBMP);
 	glDeleteTextures(1, &texture);
+
+	glPopMatrix();
 }
 
 void display()
@@ -634,6 +640,7 @@ void display()
 	else {
 		missile();
 		glLoadIdentity();
+		cc = -0.1;
 	}
 	glPopMatrix();
 
