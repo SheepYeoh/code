@@ -391,8 +391,8 @@ void leftWeapon() {
 	gluQuadricTexture(cylinder, GL_TRUE);
 
 	glPushMatrix();
-	glTranslatef(rightWeaponTranslateX, rightWeaponTranslateY, rightWeaponTranslateZ);
-	glRotatef(rightWeaponAngle, rightWeaponAngleX, rightWeaponAngleY, rightWeaponAngleZ);
+	glTranslatef(leftWeaponTranslateX, leftWeaponTranslateY, leftWeaponTranslateZ);
+	glRotatef(leftWeaponAngle, leftWeaponAngleX, leftWeaponAngleY, leftWeaponAngleZ);
 
 	glPushMatrix();
 
