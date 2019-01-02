@@ -52,9 +52,9 @@ float anger1R = 197/255.0;
 float anger1G = 139 / 255.0;
 float anger1B = 231/255.0;
 
-float anger3R = 163/255.0;
-float anger3G = 51 / 255.0;
-float anger3B = 229 / 255.0;
+float anger3R = 139/255.0;
+float anger3G = 0 / 255.0;
+float anger3B = 0 / 255.0;
 
 //angerFrequency
 float freq1 = anger1R - blue1R;
