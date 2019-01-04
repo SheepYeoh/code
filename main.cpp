@@ -72,6 +72,7 @@ double rotateCam = 0;
 boolean x = false;
 
 float angle = 0;
+float angle2 = 0;
 boolean turn = true;
 float speed = 0;
 float degree = 15;
@@ -118,6 +119,16 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		else if (wParam == 0x53) { //S
 			if (speed > .03) {
 				speed -= 0.05;
+			}
+		}
+		else if (wParam == 0x41) { //A
+			if (angle2 >= -80){
+				angle2 -= 20;
+			}
+		}
+		else if (wParam == 0x44) { //D
+			if (angle2 < 0){
+				angle2 += 20;
 			}
 		}
 		break;
@@ -675,10 +686,10 @@ void leftLeg() {
 	if (!turn) {
 		angle -= speed;
 	}
-	if (angle >degree) {
+	if (angle > degree) {
 		turn = false;
 	}
-	if (angle <-degree) {
+	if (angle < -degree) {
 		turn = true;
 	}
 	
@@ -711,10 +722,10 @@ void rightLeg() {
 	if (!turn) {
 		angle -= speed;
 	}
-	if (angle >degree) {
+	if (angle > degree) {
 		turn = false;
 	}
-	if (angle <-degree) {
+	if (angle < -degree) {
 		turn = true;
 	}
 	
@@ -992,8 +1003,13 @@ void display()
 	rightWeapon();
 	head();
 	body();
+
+	glPushMatrix();
+	glRotatef(angle2, 1, 0, 0);
 	leftHand();
 	rightHand();
+	glPopMatrix();
+
 	leftLeg();
 	rightLeg();
 	glPopMatrix();
