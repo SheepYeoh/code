@@ -118,16 +118,20 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		}
 		else if (wParam == 0x57) { //W for increase leg movement speed
 			if (speed < 5) {
-				leftlegangle = 0;
-				rightlegangle = 0;
-				speed += 0.05;
+				if (leftlegangle == 0) {
+					if (rightlegangle == 0) {
+						speed += 0.05;
+					}
+				}
 			}
 		}
 		else if (wParam == 0x53) { //S for decrease leg movement speed
-			if (speed > .03) {
-				leftlegangle = 0;
-				rightlegangle = 0;
-				speed -= 0.05;
+			if (speed < 5) {
+				if (leftlegangle == 0) {
+					if (rightlegangle == 0) {
+						speed += 0.05;
+					}
+				}
 			}
 		}
 		else if (wParam == 0x41) { //A for raise left arm
