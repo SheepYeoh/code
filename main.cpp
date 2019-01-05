@@ -74,7 +74,10 @@ double rotateCam = 0;
 boolean x = false;
 
 float angle = 0;
-float angle2 = 0;
+float lefthandangle = 0;
+float righthandangle = 0;
+float leftlegangle = 0;
+float rightlegangle = 0;
 boolean turn = true;
 float speed = 0;
 float degree = 15;
@@ -113,24 +116,66 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			}
 
 		}
-		else if (wParam == 0x57) { //W
+		else if (wParam == 0x57) { //W for increase leg movement speed
 			if (speed < 5) {
+				leftlegangle = 0;
+				rightlegangle = 0;
 				speed += 0.05;
 			}
 		}
-		else if (wParam == 0x53) { //S
+		else if (wParam == 0x53) { //S for decrease leg movement speed
 			if (speed > .03) {
+				leftlegangle = 0;
+				rightlegangle = 0;
 				speed -= 0.05;
 			}
 		}
-		else if (wParam == 0x41) { //A
-			if (angle2 >= -80) {
-				angle2 -= 20;
+		else if (wParam == 0x41) { //A for raise left arm
+			if (lefthandangle >= -80) {
+				lefthandangle -= 20;
 			}
 		}
-		else if (wParam == 0x44) { //D
-			if (angle2 < 0) {
-				angle2 += 20;
+		else if (wParam == 0x44) { //D for lower left arm
+			if (lefthandangle < 0) {
+				lefthandangle += 20;
+			}
+		}
+		else if (wParam == 0x4A) { //J for raise right arm
+			if (righthandangle >= -80) {
+				righthandangle -= 20;
+			}
+		}
+		else if (wParam == 0x4C) { //L for lower right arm
+			if (righthandangle < 0) {
+				righthandangle += 20;
+			}
+		}
+		else if (wParam == 0x55) { //U for move left leg forward
+			if (leftlegangle >= 0) {
+				if (speed == 0) {
+					leftlegangle -= 20;
+				}
+			}
+		}
+		else if (wParam == 0x49) { //I for move left leg backward
+			if (leftlegangle < 20) {
+				if (speed == 0) {
+					leftlegangle += 20;
+				}
+			}
+		}
+		else if (wParam == 0x4F) { //O for move right leg forward
+			if (rightlegangle >= 0) {
+				if (speed == 0) {
+					rightlegangle -= 20;
+				}
+			}
+		}
+		else if (wParam == 0x50) { //P for move right leg backward
+			if (rightlegangle < 20) {
+				if (speed == 0) {
+					rightlegangle += 20;
+				}
 			}
 		}
 		else if (wParam == 0x56) { //V
@@ -164,6 +209,14 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			if (claw < 0.6) {
 				claw = 0.5;
 			}
+		}
+		else if (wParam == 0x52) { //R for reset position
+			angle = 0;
+			lefthandangle = 0;
+			righthandangle = 0;
+			leftlegangle = 0;
+			rightlegangle = 0;
+			speed = 0;
 		}
 		break;
 
@@ -1050,13 +1103,25 @@ void display()
 	body();
 
 	glPushMatrix();
-	glRotatef(angle2, 1, 0, 0);
+	glRotatef(lefthandangle, 1, 0, 0);
 	leftHand();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(righthandangle, 1, 0, 0);
 	rightHand();
 	glPopMatrix();
 
+	glPushMatrix();
+	glRotatef(leftlegangle, 1, 0, 0);
 	leftLeg();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(rightlegangle, 1, 0, 0);
 	rightLeg();
+	glPopMatrix();
+
 	glPopMatrix();
 
 	glPushMatrix();
