@@ -8,7 +8,8 @@
 #pragma comment (lib, "GLU32.lib")
 
 #define WINDOW_TITLE "OpenGL Window"
-
+float hand1 = 0;
+float hand2 = 0;
 GLuint texture = 0;
 BITMAP BMP;
 HBITMAP hBMP = NULL;
@@ -130,6 +131,27 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		else if (wParam == 0x44) { //D
 			if (angle2 < 0) {
 				angle2 += 20;
+			}
+		}
+		else if (wParam == 0x56) { //V
+			if (hand1 < 15) {
+				hand1 += 5;
+			}
+
+		}
+		else if (wParam == 0x43) { //C
+			if (hand1 > -15) {
+				hand1 -= 5;
+			}
+		}
+		else if (wParam == 0x58) { //X
+			if (hand2 < 15) {
+				hand2 += 5;
+			}
+		}
+		else if (wParam == 0x5A) { //Z
+			if (hand2 > -15) {
+				hand2 -= 5;
 			}
 		}
 		else if (wParam == 0x45) { //E
@@ -602,6 +624,8 @@ void rightHand() {
 	glPopMatrix();
 
 	glPushMatrix();
+	glRotatef(hand2, 1, 0, 0);
+	glPushMatrix();
 	glTranslatef(3.5f, -1.3f, 0);
 	glColor3f(blue3R, blue3G, blue3B);
 	cylinder(0.3, 0.5, 2.0);
@@ -637,6 +661,7 @@ void rightHand() {
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.1, 0.001, 0.3);
 	glPopMatrix();
+	glPopMatrix();
 }
 
 void leftHand() {
@@ -653,6 +678,8 @@ void leftHand() {
 	cylinder(0.3, 0.3, 0.5);
 	glPopMatrix();
 
+	glPushMatrix();
+	glRotatef(hand1, 1, 0, 0);
 	glPushMatrix();
 	glTranslatef(-3.5f, -1.3f, 0);
 	glColor3f(blue3R, blue3G, blue3B);
@@ -688,6 +715,7 @@ void leftHand() {
 	glRotatef(-90.0f, 1, 0, 0);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.1, 0.001, 0.3);
+	glPopMatrix();
 	glPopMatrix();
 }
 void leftLeg() {
