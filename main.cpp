@@ -71,6 +71,12 @@ boolean enableAnger = true;
 double rotateCam = 0;
 boolean x = false;
 
+float angle = 0;
+float angle2 = 0;
+boolean turn = true;
+float speed = 0;
+float degree = 15;
+
 LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
@@ -99,23 +105,31 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				x = true;
 			}
 		}
-		else if (wParam == 0x52) {
-		}
-
 		else if (wParam == VK_SPACE) {
 			if (x) {
 				x = false;
 			}
 
 		}
-		else if (wParam == 0x58) {
-
+		else if (wParam == 0x57) { //W
+			if (speed < 5) {
+				speed += 0.05;
+			}
 		}
-		else if (wParam == 0x59) {
-
+		else if (wParam == 0x53) { //S
+			if (speed > .03) {
+				speed -= 0.05;
+			}
 		}
-		else if (wParam == 0x5A) {
-
+		else if (wParam == 0x41) { //A
+			if (angle2 >= -80){
+				angle2 -= 20;
+			}
+		}
+		else if (wParam == 0x44) { //D
+			if (angle2 < 0){
+				angle2 += 20;
+			}
 		}
 		break;
 
@@ -666,21 +680,35 @@ void leftHand() {
 }
 
 void leftLeg() {
+	if (turn) {
+		angle += speed;
+	}
+	if (!turn) {
+		angle -= speed;
+	}
+	if (angle > degree) {
+		turn = false;
+	}
+	if (angle < -degree) {
+		turn = true;
+	}
+	
 	glPushMatrix();
+	glRotatef(angle, 1, 0, 0);
 	glTranslatef(-1.5f, -4.0, 0);
-
 	glColor3f(blue3R, blue3G, blue3B);
 	sphere(0.7);
 	glPopMatrix();
 
 	glPushMatrix();
+	glRotatef(angle, 1, 0, 0);
 	glTranslatef(-1.5f, -5.0, 0);
-
 	glColor3f(blue1R, blue1G, blue1B);
 	sphere(0.8);
 	glPopMatrix();
 
 	glPushMatrix();
+	glRotatef(angle, 1, 0, 0);
 	glTranslatef(-2.5f, -6.0, -1);
 	glColor3f(blue3R, blue3G, blue3B);
 	cube(3.0, 1.0, 2.0);
@@ -688,19 +716,35 @@ void leftLeg() {
 }
 
 void rightLeg() {
+	if (turn) {
+		angle += speed;
+	}
+	if (!turn) {
+		angle -= speed;
+	}
+	if (angle > degree) {
+		turn = false;
+	}
+	if (angle < -degree) {
+		turn = true;
+	}
+	
 	glPushMatrix();
+	glRotatef(-angle, 1, 0, 0);
 	glTranslatef(1.5f, -4.0, 0);
 	glColor3f(blue3R, blue3G, blue3B);
 	sphere(0.7);
 	glPopMatrix();
 
 	glPushMatrix();
+	glRotatef(-angle, 1, 0, 0);
 	glTranslatef(1.5f, -5.0, 0);
 	glColor3f(blue1R, blue1G, blue1B);
 	sphere(0.8);
 	glPopMatrix();
 
 	glPushMatrix();
+	glRotatef(-angle, 1, 0, 0);
 	glTranslatef(0.5f, -6.0, -1);
 	glColor3f(blue3R, blue3G, blue3B);
 	cube(3.0, 1.0, 2.0);
@@ -959,8 +1003,13 @@ void display()
 	rightWeapon();
 	head();
 	body();
+
+	glPushMatrix();
+	glRotatef(angle2, 1, 0, 0);
 	leftHand();
 	rightHand();
+	glPopMatrix();
+
 	leftLeg();
 	rightLeg();
 	glPopMatrix();
