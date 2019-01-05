@@ -126,10 +126,10 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			}
 		}
 		else if (wParam == 0x53) { //S for decrease leg movement speed
-			if (speed < 5) {
+			if (speed > 0.03) {
 				if (leftlegangle == 0) {
 					if (rightlegangle == 0) {
-						speed += 0.05;
+						speed -= 0.05;
 					}
 				}
 			}
