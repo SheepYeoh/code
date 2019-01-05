@@ -16,6 +16,7 @@ GLUquadricObj *var = NULL;
 GLuint* textures = new GLuint[4];
 BITMAP image[4];
 float shoot = -0.1;
+
 //leftWeapon
 float leftWeaponAngle = -40.0f;
 float leftWeaponAngleX = 1.0f;
@@ -76,6 +77,7 @@ float angle2 = 0;
 boolean turn = true;
 float speed = 0;
 float degree = 15;
+float claw = 0.5;
 
 LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -93,7 +95,6 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			rotateCam += 20;
 
 		}
-
 		else if (wParam == VK_DOWN) {
 			if (enableAnger) {
 				enableAnger = false;
@@ -122,13 +123,24 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			}
 		}
 		else if (wParam == 0x41) { //A
-			if (angle2 >= -80){
+			if (angle2 >= -80) {
 				angle2 -= 20;
 			}
 		}
 		else if (wParam == 0x44) { //D
-			if (angle2 < 0){
+			if (angle2 < 0) {
 				angle2 += 20;
+			}
+		}
+		else if (wParam == 0x45) { //E
+			if (claw < 1.5) {
+				claw += 0.1;
+			}
+		}
+		else if (wParam == 0x51) { //Q
+			claw -= 0.1;
+			if (claw < 0.6) {
+				claw = 0.5;
 			}
 		}
 		break;
@@ -604,19 +616,19 @@ void rightHand() {
 	glPushMatrix();
 	glTranslatef(3.5f, -1.6f, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
-	cylinder(0.1, 0.001, 0.5);
+	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(3.5f, -1.35f, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
-	cylinder(0.1, 0.001, 0.5);
+	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(3.5f, -1.1f, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
-	cylinder(0.1, 0.001, 0.5);
+	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
@@ -656,19 +668,19 @@ void leftHand() {
 	glPushMatrix();
 	glTranslatef(-3.5f, -1.6f, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
-	cylinder(0.1, 0.001, 0.5);
+	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(-3.5f, -1.35f, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
-	cylinder(0.1, 0.001, 0.5);
+	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(-3.5f, -1.1f, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
-	cylinder(0.1, 0.001, 0.5);
+	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
@@ -678,7 +690,6 @@ void leftHand() {
 	cylinder(0.1, 0.001, 0.3);
 	glPopMatrix();
 }
-
 void leftLeg() {
 	if (turn) {
 		angle += speed;
@@ -692,7 +703,7 @@ void leftLeg() {
 	if (angle < -degree) {
 		turn = true;
 	}
-	
+
 	glPushMatrix();
 	glRotatef(angle, 1, 0, 0);
 	glTranslatef(-1.5f, -4.0, 0);
@@ -728,7 +739,7 @@ void rightLeg() {
 	if (angle < -degree) {
 		turn = true;
 	}
-	
+
 	glPushMatrix();
 	glRotatef(-angle, 1, 0, 0);
 	glTranslatef(1.5f, -4.0, 0);
@@ -838,6 +849,9 @@ void leftMissile() {
 	gluCylinder(var, 0.001, 0.2, 0.7, 20, 20);
 	glPopMatrix();
 
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 
 	//texture missile cylinder
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
@@ -903,6 +917,9 @@ void rightMissile() {
 	gluCylinder(var, 0.001, 0.2, 0.7, 20, 20);
 	glPopMatrix();
 
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 
 	//texture missile cylinder
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
