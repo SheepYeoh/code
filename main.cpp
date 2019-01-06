@@ -196,7 +196,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			}
 
 		}
-		else if (wParam == 0x43) { //C left hand upward
+		else if (wParam == 0x43) { //C for left hand upward
 			if (hand1 > -15) {
 				hand1 -= 5;
 			}
@@ -216,12 +216,12 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				leftHandUp += 5;
 			}
 		}
-		else if (wParam == 0x42) { //N for left hand outward
+		else if (wParam == 0x42) { //N for left hand inward
 			if (leftHandUp > -90) {
 				leftHandUp -= 5;
 			}
 		}
-		else if (wParam == 0x47) { //F for right hand outward
+		else if (wParam == 0x47) { //F for right hand inward
 			if (rightHandUp < 90) {
 				rightHandUp += 5;
 			}
@@ -231,12 +231,12 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				rightHandUp -= 5;
 			}
 		}
-		else if (wParam == 0x45) { //E decrease claw length
+		else if (wParam == 0x45) { //E for increase claw length
 			if (claw < 1.5) {
 				claw += 0.1;
 			}
 		}
-		else if (wParam == 0x51) { //Q for increase claw length
+		else if (wParam == 0x51) { //Q for decrease claw length
 			claw -= 0.1;
 			if (claw < 0.6) {
 				claw = 0.5;
