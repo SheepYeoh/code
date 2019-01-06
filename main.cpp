@@ -100,25 +100,25 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		break;
 
 	case WM_KEYDOWN:
-		if (wParam == VK_LEFT) {
+		if (wParam == VK_LEFT) { //Camera for y-axis
 			rotateCam -= 20;
 		}
-		else if (wParam == VK_RIGHT) {
+		else if (wParam == VK_RIGHT) { // Camera for y-axis
 			rotateCam += 20;
 
 		}
-		else if (wParam == VK_DOWN) {
+		else if (wParam == 0x4D) { //M for angry mode
 			if (enableAnger) {
 				enableAnger = false;
 				angry = true;
 			}
 		}
-		else if (wParam == VK_UP) {
+		else if (wParam == VK_UP) { //Up for shoot missile
 			if (!x) {
 				x = true;
 			}
 		}
-		else if (wParam == VK_SPACE) {
+		else if (wParam == VK_SPACE) { //Space for reload
 			if (x) {
 				x = false;
 			}
@@ -190,53 +190,53 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				}
 			}
 		}
-		else if (wParam == 0x56) { //V
+		else if (wParam == 0x56) { //V for left hand downward
 			if (hand1 < 90) {
 				hand1 += 5;
 			}
 
 		}
-		else if (wParam == 0x43) { //C
+		else if (wParam == 0x43) { //C left hand upward
 			if (hand1 > -15) {
 				hand1 -= 5;
 			}
 		}
-		else if (wParam == 0x58) { //X
+		else if (wParam == 0x58) { //X for right hand downward
 			if (hand2 < 90) {
 				hand2 += 5;
 			}
 		}
-		else if (wParam == 0x5A) { //Z
+		else if (wParam == 0x5A) { //Z for right hand upward
 			if (hand2 > -15) {
 				hand2 -= 5;
 			}
 		}
-		else if (wParam == 0x4E) { //B
+		else if (wParam == 0x4E) { //B for left hand outward
 			if (leftHandUp < 0) {
 				leftHandUp += 5;
 			}
 		}
-		else if (wParam == 0x42) { //N
+		else if (wParam == 0x42) { //N for left hand outward
 			if (leftHandUp > -90) {
 				leftHandUp -= 5;
 			}
 		}
-		else if (wParam == 0x47) { //F
-		if (rightHandUp < 90) {
-			rightHandUp += 5;
+		else if (wParam == 0x47) { //F for right hand outward
+			if (rightHandUp < 90) {
+				rightHandUp += 5;
+			}
 		}
+		else if (wParam == 0x46) { //G for right hand outward
+			if (rightHandUp > 0) {
+				rightHandUp -= 5;
+			}
 		}
-		else if (wParam == 0x46) { //G
-		if (rightHandUp > 0) {
-			rightHandUp -= 5;
-		}
-		}
-		else if (wParam == 0x45) { //E
+		else if (wParam == 0x45) { //E decrease claw length
 			if (claw < 1.5) {
 				claw += 0.1;
 			}
 		}
-		else if (wParam == 0x51) { //Q
+		else if (wParam == 0x51) { //Q for increase claw length
 			claw -= 0.1;
 			if (claw < 0.6) {
 				claw = 0.5;
@@ -250,37 +250,37 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			rightlegangle = 0;
 			speed = 0;
 		}
-		else if (wParam == 0x31) { //normal
-		face = 1;
+		else if (wParam == 0x31) { //1 normal 
+			face = 1;
 		}
-		else if (wParam == 0x32) { //smile
-		face = 2;
+		else if (wParam == 0x32) { //2 smile 
+			face = 2;
 		}
-		else if (wParam == 0x33) { //sad
-		face = 3;
+		else if (wParam == 0x33) { //3 sad 
+			face = 3;
 		}
-		else if (wParam == 0x34) { //scare
-		face = 4;
+		else if (wParam == 0x34) { //4 scare 
+			face = 4;
 		}
 		break;
-		case WM_MOUSEMOVE:
-			// save old mouse coordinates
-			oldMouseX = mouseX;
-			oldMouseY = mouseY;
+	case WM_MOUSEMOVE:
+		// save old mouse coordinates
+		oldMouseX = mouseX;
+		oldMouseY = mouseY;
 
-			// get mouse coordinates from Windows
-			mouseX = LOWORD(lParam);
-			mouseY = HIWORD(lParam);
+		// get mouse coordinates from Windows
+		mouseX = LOWORD(lParam);
+		mouseY = HIWORD(lParam);
 
-			// these lines limit the camera's range
+		// these lines limit the camera's range
 
-			if ((mouseX - oldMouseX) > 0)		// mouse moved to the right
-				rotateCam += 5.0f;
-			else if ((mouseX - oldMouseX) < 0)	// mouse moved to the left
-				rotateCam -= 5.0f;
+		if ((mouseX - oldMouseX) > 0)		// mouse moved to the right
+			rotateCam += 5.0f;
+		else if ((mouseX - oldMouseX) < 0)	// mouse moved to the left
+			rotateCam -= 5.0f;
 
-			return 0;
-			break;
+		return 0;
+		break;
 	default:
 		break;
 	}
@@ -458,33 +458,6 @@ void cube(float maxHeight, float maxWidth, float maxLength) {
 }
 
 void cube(float maxHeight, float maxWidth, float maxLength, const char bitmap[]) {
-
-	glBegin(GL_QUADS);
-	glColor3f(blue1R, blue1G, blue1B);
-	//face1
-	glVertex3f(0.0f, 0.0f, maxHeight);
-	glVertex3f(maxLength, 0.0f, maxHeight);
-	glVertex3f(maxLength, 0.0f, 0.0f);
-	glVertex3f(0.0f, 0.0f, 0.0f);
-
-	glEnd();
-	glBegin(GL_QUADS);
-	glColor3f(blue1R, blue1G, blue1B);
-	//face2
-	glVertex3f(0.0f, maxWidth, maxHeight);
-	glVertex3f(0.0f, 0.0f, maxHeight);
-	glVertex3f(0.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, maxWidth, 0.0f);
-	glEnd();
-	glBegin(GL_QUADS);
-	glColor3f(blue1R, blue1G, blue1B);
-	//face3
-	glVertex3f(0.0f, maxWidth, 0.0f);
-	glVertex3f(maxLength, maxWidth, 0.0f);
-	glVertex3f(maxLength, 0.0f, 0.0f);
-	glVertex3f(0.0f, 0.0f, 0.0f);
-	glEnd();
-
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	HBITMAP hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), bitmap, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
 	GetObject(hBMP, sizeof(BMP), &BMP);
@@ -495,6 +468,41 @@ void cube(float maxHeight, float maxWidth, float maxLength, const char bitmap[])
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+
+	glBegin(GL_QUADS);
+	//face1
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(0.0f, 0.0f, maxHeight);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(maxLength, 0.0f, maxHeight);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(maxLength, 0.0f, 0.0f);
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+
+	glEnd();
+	glBegin(GL_QUADS);
+	//face2
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(0.0f, maxWidth, maxHeight);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(0.0f, 0.0f, maxHeight);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(0.0f, maxWidth, 0.0f);
+	glEnd();
+	glBegin(GL_QUADS);
+	//face3
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(0.0f, maxWidth, 0.0f);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(maxLength, maxWidth, 0.0f);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(maxLength, 0.0f, 0.0f);
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glEnd();
 	glBegin(GL_QUADS);
 	//face4*
 	glTexCoord2f(0.0, 0.0);
@@ -506,27 +514,32 @@ void cube(float maxHeight, float maxWidth, float maxLength, const char bitmap[])
 	glTexCoord2f(1.0, 0.0);
 	glVertex3f(0.0f, 0.0f, maxHeight);
 	glEnd();
-	glDisable(GL_TEXTURE_2D);
-	DeleteObject(hBMP);
-	glDeleteTextures(1, &texture);
-
 	glBegin(GL_QUADS);
-	glColor3f(blue1R, blue1G, blue1B);
 	//face5*
+	glTexCoord2f(0.0, 0.0);
 	glVertex3f(0.0f, maxWidth, maxHeight);
+	glTexCoord2f(1.0, 0.0);
 	glVertex3f(maxLength, maxWidth, maxHeight);
+	glTexCoord2f(1.0, 1.0);
 	glVertex3f(maxLength, maxWidth, 0.0f);
+	glTexCoord2f(0.0, 1.0);
 	glVertex3f(0.0f, maxWidth, 0.0f);
 	glEnd();
 	glBegin(GL_QUADS);
-	glColor3f(blue1R, blue1G, blue1B);
 	//face6
+	glTexCoord2f(0.0, 0.0);
 	glVertex3f(maxLength, maxWidth, maxHeight);
+	glTexCoord2f(1.0, 0.0);
 	glVertex3f(maxLength, 0.0f, maxHeight);
+	glTexCoord2f(1.0, 1.0);
 	glVertex3f(maxLength, 0.0f, 0.0f);
+	glTexCoord2f(0.0, 1.0);
 	glVertex3f(maxLength, maxWidth, 0.0f);
 	glEnd();
 
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 }
 
 
@@ -695,7 +708,7 @@ void body() {
 	glColor3f(blue1R, blue1G, blue1B);
 	glTranslatef(-3, -3, -2);
 	glRotatef(20.0f, 1, 0, 0);
-	cube(3, 6, 6);
+	cube(3, 6, 6, "weapon1.bmp");
 	glPopMatrix();
 
 	var = gluNewQuadric();
@@ -724,10 +737,22 @@ void body() {
 }
 
 void rightHand() {
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "weapon1.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	gluQuadricTexture(var, GL_TRUE);
+
 	glPushMatrix();
 	glTranslatef(3.4f, 0, 0);
 	glColor3f(blue3R, blue3G, blue3B);
-	sphere(0.8);
+	gluSphere(var, 0.8, 30, 30);
 	glPopMatrix();
 
 	glPushMatrix();
@@ -736,21 +761,41 @@ void rightHand() {
 	glPushMatrix();
 	glRotatef(90.0f, 1, 0, 0);
 	glColor3f(160 / 255.0, 82 / 255.0, 45 / 255.0);
-	cylinder(0.3, 0.3, 0.5);
+	gluCylinder(var, 0.3, 0.3, 0.5, 30, 30);
 	glPopMatrix();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "weapon1.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	gluQuadricTexture(var, GL_TRUE);
 
 	glPushMatrix();
 	glTranslatef(0, -0.4f, 0);
 	glRotatef(hand2, 1, 0, 0);
 	glPushMatrix();
 	glColor3f(blue3R, blue3G, blue3B);
-	cylinder(0.3, 0.5, 2.0);
+	gluCylinder(var, 0.3, 0.5, 2.0, 20, 20);
 	glPopMatrix();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 
 	glPushMatrix();
 	glTranslatef(-0.35, -0.36, 1.9f);
 	glColor3f(160 / 255.0, 82 / 255.0, 45 / 255.0);
-	cube(0.75, 0.75, 0.75);
+	cube(0.75, 0.75, 0.75, "weapon1.bmp");
 	glPopMatrix();
 
 	glPushMatrix();
@@ -782,10 +827,23 @@ void rightHand() {
 }
 
 void leftHand() {
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "weapon1.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	gluQuadricTexture(var, GL_TRUE);
+
 	glPushMatrix();
 	glTranslatef(-3.4f, 0, 0);
 	glColor3f(blue3R, blue3G, blue3B);
-	sphere(0.8);
+	gluSphere(var, 0.8, 30, 30);
 	glPopMatrix();
 
 	glPushMatrix();
@@ -794,21 +852,41 @@ void leftHand() {
 	glPushMatrix();
 	glRotatef(90.0f, 1, 0, 0);
 	glColor3f(160 / 255.0, 82 / 255.0, 45 / 255.0);
-	cylinder(0.3, 0.3, 0.5);
+	gluCylinder(var, 0.3, 0.3, 0.5, 30, 30);
 	glPopMatrix();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "weapon1.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	gluQuadricTexture(var, GL_TRUE);
 
 	glPushMatrix();
 	glTranslatef(0, -0.4f, 0);
 	glRotatef(hand1, 1, 0, 0);
 	glPushMatrix();
 	glColor3f(blue3R, blue3G, blue3B);
-	cylinder(0.3, 0.5, 2.0);
+	gluCylinder(var, 0.3, 0.5, 2.0, 20, 20);
 	glPopMatrix();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 
 	glPushMatrix();
 	glTranslatef(-0.35, -0.36, 1.9f);
 	glColor3f(160 / 255.0, 82 / 255.0, 45 / 255.0);
-	cube(0.75, 0.75, 0.75);
+	cube(0.75, 0.75, 0.75, "weapon1.bmp");
 	glPopMatrix();
 
 	glPushMatrix();
@@ -852,25 +930,42 @@ void leftLeg() {
 		turn = true;
 	}
 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "weapon1.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	gluQuadricTexture(var, GL_TRUE);
+
 	glPushMatrix();
 	glRotatef(angle, 1, 0, 0);
 	glTranslatef(-1.5f, -4.0, 0);
 	glColor3f(blue3R, blue3G, blue3B);
-	sphere(0.7);
+	gluSphere(var, 0.7, 30, 30);
 	glPopMatrix();
 
 	glPushMatrix();
 	glRotatef(angle, 1, 0, 0);
 	glTranslatef(-1.5f, -5.0, 0);
 	glColor3f(blue1R, blue1G, blue1B);
-	sphere(0.8);
+	gluSphere(var, 0.8, 30, 30);
 	glPopMatrix();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+
 
 	glPushMatrix();
 	glRotatef(angle, 1, 0, 0);
 	glTranslatef(-2.5f, -6.0, -1);
 	glColor3f(blue3R, blue3G, blue3B);
-	cube(3.0, 1.0, 2.0);
+	cube(3.0, 1.0, 2.0, "weapon1.bmp");
 	glPopMatrix();
 }
 
@@ -888,25 +983,41 @@ void rightLeg() {
 		turn = true;
 	}
 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "weapon1.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+	gluQuadricTexture(var, GL_TRUE);
+
 	glPushMatrix();
 	glRotatef(-angle, 1, 0, 0);
 	glTranslatef(1.5f, -4.0, 0);
 	glColor3f(blue3R, blue3G, blue3B);
-	sphere(0.7);
+	gluSphere(var, 0.7, 30, 30);
 	glPopMatrix();
 
 	glPushMatrix();
 	glRotatef(-angle, 1, 0, 0);
 	glTranslatef(1.5f, -5.0, 0);
 	glColor3f(blue1R, blue1G, blue1B);
-	sphere(0.8);
+	gluSphere(var, 0.8, 30, 30);
 	glPopMatrix();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
 
 	glPushMatrix();
 	glRotatef(-angle, 1, 0, 0);
 	glTranslatef(0.5f, -6.0, -1);
 	glColor3f(blue3R, blue3G, blue3B);
-	cube(3.0, 1.0, 2.0);
+	cube(3.0, 1.0, 2.0, "weapon1.bmp");
 	glPopMatrix();
 }
 
@@ -915,7 +1026,7 @@ void head() {
 	glTranslatef(-1.0f, 1.5, 1.3);
 
 	glColor3f(blue3R, blue3G, blue3B);
-	cube(2.0, 2.0, 2.0);
+	cube(2.0, 2.0, 2.0, "weapon1.bmp");
 	glPopMatrix();
 
 	glPushMatrix();
@@ -970,11 +1081,11 @@ void head() {
 	if (face == 1) {
 		glPushMatrix();
 		glTranslatef(0, 1.9, 3.35);
-		glColor3f(1,1,1);
+		glColor3f(1, 1, 1);
 		glLineWidth(2);
 		glBegin(GL_LINES);
-		glVertex2f(0.5,0);
-		glVertex2f(-0.5,0);
+		glVertex2f(0.5, 0);
+		glVertex2f(-0.5, 0);
 		glEnd();
 		glPopMatrix();
 	}
@@ -988,7 +1099,7 @@ void head() {
 		double r = 0.8;
 		double start_angle = 4;
 		double end_angle = 5.4;
-		double max_angle = 2 * (22/7.0);
+		double max_angle = 2 * (22 / 7.0);
 		double angle_increment = (22 / 7.0) / 1000;
 		for (double theta = start_angle; theta < end_angle; theta += angle_increment)
 		{
@@ -1042,7 +1153,6 @@ void head() {
 		glEnd();
 		glPopMatrix();
 	}
-	
 }
 
 void leftMissile() {
@@ -1239,7 +1349,7 @@ void angryMode() {
 
 void floor() {
 	glPushMatrix();
-	glTranslatef(-23,-6,-23);
+	glTranslatef(-23, -6, -23);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear background colour (default : black)
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -1258,13 +1368,13 @@ void floor() {
 	glBegin(GL_QUADS);
 	//face1
 	glTexCoord2f(0.0, 1.0);
-	glVertex3f(0,0,0);
+	glVertex3f(0, 0, 0);
 	glTexCoord2f(1.0, 1.0);
-	glVertex3f(0,0, 50);
+	glVertex3f(0, 0, 50);
 	glTexCoord2f(1.0, 0.0);
-	glVertex3f(50,0, 50);
+	glVertex3f(50, 0, 50);
 	glTexCoord2f(0.0, 0.0);
-	glVertex3f(50,0, 0);
+	glVertex3f(50, 0, 0);
 
 	glEnd();
 
@@ -1308,6 +1418,9 @@ void display()
 	glPushMatrix();
 	glRotatef(lefthandangle, 1, 0, 0);
 	leftHand();
+	glPopMatrix();
+
+	glPushMatrix();
 	glRotatef(righthandangle, 1, 0, 0);
 	rightHand();
 	glPopMatrix();
