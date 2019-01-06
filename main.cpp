@@ -216,7 +216,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				leftHandUp += 5;
 			}
 		}
-		else if (wParam == 0x42) { //N ffor left hand outward
+		else if (wParam == 0x42) { //N for left hand outward
 			if (leftHandUp > -90) {
 				leftHandUp -= 5;
 			}
@@ -1153,7 +1153,6 @@ void head() {
 		glEnd();
 		glPopMatrix();
 	}
-
 }
 
 void leftMissile() {
