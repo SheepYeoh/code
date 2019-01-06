@@ -35,28 +35,25 @@ float rightWeaponAngleZ = 0.0f;
 float rightWeaponTranslateX = 1.5f;
 float rightWeaponTranslateY = 2.5f;
 float rightWeaponTranslateZ = -0.5f;
+int face = 1;
 
 //blue RGB
 float blue1R = 0;
 float blue1G = 180 / 255.0;
 float blue1B = 255 / 255.0;
 
-float blue2R = 0;
-float blue2G = 150 / 255.0;
-float blue2B = 45 / 1.0;
-
 float blue3R = 0;
 float blue3G = 64 / 255.0;
 float blue3B = 255 / 255.0;
 
 //anger rgb
-float anger1R = 197 / 255.0;
-float anger1G = 139 / 255.0;
-float anger1B = 231 / 255.0;
+float anger1R = 255 / 255.0;
+float anger1G = 0 / 255.0;
+float anger1B = 0 / 255.0;
 
-float anger3R = 163 / 255.0;
-float anger3G = 51 / 255.0;
-float anger3B = 229 / 255.0;
+float anger3R = 178 / 255.0;
+float anger3G = 34 / 255.0;
+float anger3B = 34 / 255.0;
 
 //angerFrequency
 float freq1 = anger1R - blue1R;
@@ -78,10 +75,21 @@ float lefthandangle = 0;
 float righthandangle = 0;
 float leftlegangle = 0;
 float rightlegangle = 0;
+float leftHandUp = 0;
+float rightHandUp = 0;
 boolean turn = true;
 float speed = 0;
 float degree = 15;
 float claw = 0.5;
+float oldMouseX;
+float oldMouseY;
+float mouseX;
+float mouseY;
+
+float lightX = 0, lightY = 8, lightZ = -8;
+float a[] = { 1,0,0,0 };
+float d[] = { 1,0,0,0 };
+float p[] = { lightX,lightY,lightX };
 
 LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -183,7 +191,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			}
 		}
 		else if (wParam == 0x56) { //V
-			if (hand1 < 15) {
+			if (hand1 < 90) {
 				hand1 += 5;
 			}
 
@@ -194,7 +202,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			}
 		}
 		else if (wParam == 0x58) { //X
-			if (hand2 < 15) {
+			if (hand2 < 90) {
 				hand2 += 5;
 			}
 		}
@@ -202,6 +210,26 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			if (hand2 > -15) {
 				hand2 -= 5;
 			}
+		}
+		else if (wParam == 0x4E) { //B
+			if (leftHandUp < 0) {
+				leftHandUp += 5;
+			}
+		}
+		else if (wParam == 0x42) { //N
+			if (leftHandUp > -90) {
+				leftHandUp -= 5;
+			}
+		}
+		else if (wParam == 0x47) { //F
+		if (rightHandUp < 90) {
+			rightHandUp += 5;
+		}
+		}
+		else if (wParam == 0x46) { //G
+		if (rightHandUp > 0) {
+			rightHandUp -= 5;
+		}
 		}
 		else if (wParam == 0x45) { //E
 			if (claw < 1.5) {
@@ -222,8 +250,37 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			rightlegangle = 0;
 			speed = 0;
 		}
+		else if (wParam == 0x31) { //normal
+		face = 1;
+		}
+		else if (wParam == 0x32) { //smile
+		face = 2;
+		}
+		else if (wParam == 0x33) { //sad
+		face = 3;
+		}
+		else if (wParam == 0x34) { //scare
+		face = 4;
+		}
 		break;
+		case WM_MOUSEMOVE:
+			// save old mouse coordinates
+			oldMouseX = mouseX;
+			oldMouseY = mouseY;
 
+			// get mouse coordinates from Windows
+			mouseX = LOWORD(lParam);
+			mouseY = HIWORD(lParam);
+
+			// these lines limit the camera's range
+
+			if ((mouseX - oldMouseX) > 0)		// mouse moved to the right
+				rotateCam += 5.0f;
+			else if ((mouseX - oldMouseX) < 0)	// mouse moved to the left
+				rotateCam -= 5.0f;
+
+			return 0;
+			break;
 	default:
 		break;
 	}
@@ -675,48 +732,51 @@ void rightHand() {
 
 	glPushMatrix();
 	glTranslatef(3.5f, -0.8f, 0);
-	glColor3f(160 / 255.0, 82 / 255.0, 45 / 255.0);
+	glRotatef(rightHandUp, 0, 0, 1);
+	glPushMatrix();
 	glRotatef(90.0f, 1, 0, 0);
+	glColor3f(160 / 255.0, 82 / 255.0, 45 / 255.0);
 	cylinder(0.3, 0.3, 0.5);
 	glPopMatrix();
 
 	glPushMatrix();
+	glTranslatef(0, -0.4f, 0);
 	glRotatef(hand2, 1, 0, 0);
 	glPushMatrix();
-	glTranslatef(3.5f, -1.3f, 0);
 	glColor3f(blue3R, blue3G, blue3B);
 	cylinder(0.3, 0.5, 2.0);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(3.15f, -1.7f, 1.9f);
+	glTranslatef(-0.35, -0.36, 1.9f);
 	glColor3f(160 / 255.0, 82 / 255.0, 45 / 255.0);
 	cube(0.75, 0.75, 0.75);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(3.5f, -1.6f, 2.6);
+	glTranslatef(0, -0.25f, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(3.5f, -1.35f, 2.6);
+	glTranslatef(0, 0, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(3.5f, -1.1f, 2.6);
+	glTranslatef(0, 0.25, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(3.5f, -1.0f, 2.3);
+	glTranslatef(0, 0.35, 2.5);
 	glRotatef(-90.0f, 1, 0, 0);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.1, 0.001, 0.3);
+	glPopMatrix();
 	glPopMatrix();
 	glPopMatrix();
 }
@@ -730,48 +790,51 @@ void leftHand() {
 
 	glPushMatrix();
 	glTranslatef(-3.5f, -0.8f, 0);
+	glRotatef(leftHandUp, 0, 0, 1);
+	glPushMatrix();
 	glRotatef(90.0f, 1, 0, 0);
 	glColor3f(160 / 255.0, 82 / 255.0, 45 / 255.0);
 	cylinder(0.3, 0.3, 0.5);
 	glPopMatrix();
 
 	glPushMatrix();
+	glTranslatef(0, -0.4f, 0);
 	glRotatef(hand1, 1, 0, 0);
 	glPushMatrix();
-	glTranslatef(-3.5f, -1.3f, 0);
 	glColor3f(blue3R, blue3G, blue3B);
 	cylinder(0.3, 0.5, 2.0);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-3.9f, -1.7f, 1.9f);
+	glTranslatef(-0.35, -0.36, 1.9f);
 	glColor3f(160 / 255.0, 82 / 255.0, 45 / 255.0);
 	cube(0.75, 0.75, 0.75);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-3.5f, -1.6f, 2.6);
+	glTranslatef(0, -0.25f, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-3.5f, -1.35f, 2.6);
+	glTranslatef(0, 0, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-3.5f, -1.1f, 2.6);
+	glTranslatef(0, 0.25, 2.6);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.1, 0.001, claw);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-3.5f, -1.0f, 2.3);
+	glTranslatef(0, 0.35, 2.5);
 	glRotatef(-90.0f, 1, 0, 0);
 	glColor3f(211 / 255.0, 211 / 255.0, 211 / 255.0);
 	cylinder(0.1, 0.001, 0.3);
+	glPopMatrix();
 	glPopMatrix();
 	glPopMatrix();
 }
@@ -903,6 +966,83 @@ void head() {
 	glColor3f(160 / 255.0, 82 / 255.0, 45 / 255.0);
 	nose(0.4, 0, 0.2);
 	glPopMatrix();
+
+	if (face == 1) {
+		glPushMatrix();
+		glTranslatef(0, 1.9, 3.35);
+		glColor3f(1,1,1);
+		glLineWidth(2);
+		glBegin(GL_LINES);
+		glVertex2f(0.5,0);
+		glVertex2f(-0.5,0);
+		glEnd();
+		glPopMatrix();
+	}
+	else if (face == 2) {
+		glPushMatrix();
+		glTranslatef(0, 2.5, 3.35);
+		glLineWidth(2);
+		glBegin(GL_LINE_STRIP);
+		double x = 2.047;
+		double y = 3.5;
+		double r = 0.8;
+		double start_angle = 4;
+		double end_angle = 5.4;
+		double max_angle = 2 * (22/7.0);
+		double angle_increment = (22 / 7.0) / 1000;
+		for (double theta = start_angle; theta < end_angle; theta += angle_increment)
+		{
+			x = r * cos(theta);
+			y = r * sin(theta);
+			glColor3f(1, 1, 1);
+			glVertex2f(x, y);
+		}
+		glEnd();
+		glPopMatrix();
+	}
+	else if (face == 3) {
+		glPushMatrix();
+		glTranslatef(0, 1.1, 3.35);
+		glLineWidth(2);
+		glBegin(GL_LINE_STRIP);
+		double x = 2.047;
+		double y = 3.5;
+		double r = 0.8;
+		double start_angle = 7.2;
+		double end_angle = 8.6;
+		double max_angle = 2 * (22 / 7.0);
+		double angle_increment = (22 / 7.0) / 1000;
+		for (double theta = start_angle; theta < end_angle; theta += angle_increment)
+		{
+			x = r * cos(theta);
+			y = r * sin(theta);
+			glColor3f(1, 1, 1);
+			glVertex2f(x, y);
+		}
+		glEnd();
+		glPopMatrix();
+	}
+	else if (face == 4) {
+		glPushMatrix();
+		glTranslatef(0, 2, 3.35);
+		glLineWidth(2);
+		glColor3f(1, 1, 1);
+		glBegin(GL_LINE_STRIP);
+		glVertex2f(-0.5, 0);
+		glVertex2f(-0.4, -0.2);
+		glVertex2f(-0.3, 0);
+		glVertex2f(-0.2, -0.2);
+		glVertex2f(-0.1, 0);
+		glVertex2f(0, -0.2);
+		glVertex2f(0.1, 0);
+		glVertex2f(0.2, -0.2);
+		glVertex2f(0.3, 0);
+		glVertex2f(0.4, -0.2);
+		glVertex2f(0.5, 0);
+		glEnd();
+		glPopMatrix();
+	}
+	
 }
 
 void leftMissile() {
@@ -1040,8 +1180,8 @@ void rightMissile() {
 
 	glPopMatrix();
 }
-void display()
-{
+
+void angryMode() {
 	if (!angry) {
 		if (blue1R >= 0 / 255.0) {
 			blue1R -= freq1 / 1000;
@@ -1049,7 +1189,7 @@ void display()
 		if (blue1G <= 180 / 255.0) {
 			blue1G -= freq2 / 1000;
 		}
-		if (blue1B >= 255 / 255.0) {
+		if (blue1B <= 255 / 255.0) {
 			blue1B -= freq3 / 1000;
 		}
 
@@ -1059,12 +1199,12 @@ void display()
 		if (blue3G <= 64 / 255.0) {
 			blue3G -= freq5 / 1000;
 		}
-		if (blue3B >= 255 / 255.0) {
+		if (blue3B <= 255 / 255.0) {
 			blue3B -= freq6 / 1000;
 		}
 
-		if (blue1R <= 0 / 255.0&& blue1G >= 180 / 255.0 && blue1B >= 255 / 255.0 &&
-			blue3R <= 0 / 255.0&& blue3G >= 64 / 255.0 && blue3B >= 255 / 255.0) {
+		if (blue1R <= 0 / 255.0&& blue1G >= 180 / 255.0 && blue1B <= 255 / 255.0 &&
+			blue3R <= 0 / 255.0&& blue3G >= 64 / 255.0 && blue3B <= 255 / 255.0) {
 			enableAnger = true;
 		}
 	}
@@ -1076,7 +1216,7 @@ void display()
 		if (blue1G >= anger1G) {
 			blue1G += freq2 / 20;
 		}
-		if (blue1B <= anger1B) {
+		if (blue1B >= anger1B) {
 			blue1B += freq3 / 20;
 		}
 
@@ -1086,21 +1226,80 @@ void display()
 		if (blue3G >= anger3G) {
 			blue3G += freq5 / 20;
 		}
-		if (blue3B <= anger3B) {
+		if (blue3B >= anger3B) {
 			blue3B += freq6 / 20;
 		}
 
-		if (blue1R >= anger1R && blue1G <= anger1G && blue1B >= anger1B &&
-			blue3R >= anger3R && blue3G <= anger3G && blue3B >= anger3B) {
+		if (blue1R >= anger1R && blue1G <= anger1G && blue1B <= anger1B &&
+			blue3R >= anger3R && blue3G <= anger3G && blue3B <= anger3B) {
 			angry = false;
 		}
 	}
+}
+
+void floor() {
+	glPushMatrix();
+	glTranslatef(-23,-6,-23);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear background colour (default : black)
+	glEnable(GL_DEPTH_TEST);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	HBITMAP hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL), "ocean.bmp", IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth, BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+
+	glBegin(GL_QUADS);
+	//face1
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(0,0,0);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(0,0, 50);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(50,0, 50);
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(50,0, 0);
+
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+	DeleteObject(hBMP);
+	glDeleteTextures(1, &texture);
+	glPopMatrix();
+}
+
+void light() {
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, d);
+	glLightfv(GL_LIGHT0, GL_POSITION, p);
+
+	glEnable(GL_LIGHT0);
+
+	glEnable(GL_COLOR_MATERIAL);
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT, a);
+}
+
+void display()
+{
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-
+	glClearColor(0.196078f, 0.6f, 0.8f, 1.0f);
 	glPushMatrix();
+	angryMode();
+
+	glRotatef(10, 1, 0, 0);
+
 	glRotatef(rotateCam, 0, 1, 0);
 	glPushMatrix();
+
+	light();
+	floor();
 	leftWeapon();
 	rightWeapon();
 	head();
@@ -1109,9 +1308,6 @@ void display()
 	glPushMatrix();
 	glRotatef(lefthandangle, 1, 0, 0);
 	leftHand();
-	glPopMatrix();
-
-	glPushMatrix();
 	glRotatef(righthandangle, 1, 0, 0);
 	rightHand();
 	glPopMatrix();
@@ -1193,7 +1389,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-7.0f, 7.0f, -7.0f, 7.0f, -7.0f, 7.0f);
+	glOrtho(-7.0f, 7.0f, -7.0f, 7.0f, -25.0f, 25.0f);
 	glMatrixMode(GL_MODELVIEW);
 	while (true)
 	{
