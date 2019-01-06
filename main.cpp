@@ -249,6 +249,12 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			leftlegangle = 0;
 			rightlegangle = 0;
 			speed = 0;
+			face = 1;
+			claw = 0.5;
+			hand1 = 0;
+			hand2 = 0;
+			leftHandUp = 0;
+			rightHandUp = 0;
 		}
 		else if (wParam == 0x31) { //1 normal 
 			face = 1;
