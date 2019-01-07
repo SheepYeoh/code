@@ -88,7 +88,7 @@ float mouseY;
 
 float lightX = 0, lightY = 8, lightZ = -8;
 float a[] = { 1,0,0,0 };
-float d[] = { 1,0,0,0 };
+float d[] = { 1,1,0,0 };
 float p[] = { lightX,lightY,lightX };
 
 LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -280,6 +280,33 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		else if (wParam == 0x34) { //4 scare 
 			face = 4;
 		}
+		else if (wParam == '5') { //5 Move light position up
+			p[1] -= 1;
+		}
+		else if (wParam == '6') { //6 Move light position down
+			p[1] += 1;
+		}
+		else if (wParam == '7') { //7 Move light position left
+			p[0] -= 1;
+		}
+		else if (wParam == '8') { //8 Move light position right
+			p[0] += 1;
+		}
+		else if (wParam == '9') { //9 Move light position near
+			p[2] -= 1;
+		}
+		else if (wParam == '0') { //0 Move light position far
+			p[2] += 1;
+		}
+		else if (wParam == 'H') {
+			if (!glIsEnabled(GL_LIGHTING)) {
+				glEnable(GL_LIGHTING);
+			}
+			else {
+				glDisable(GL_LIGHTING);
+			}
+		}
+
 		break;
 	case WM_MOUSEMOVE:
 		// save old mouse coordinates
