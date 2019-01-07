@@ -26,6 +26,7 @@ float leftWeaponAngleZ = 0.0f;
 float leftWeaponTranslateX = -1.5f;
 float leftWeaponTranslateY = 2.5f;
 float leftWeaponTranslateZ = -0.5f;
+int temp;
 
 //rightWeapon
 float rightWeaponAngle = -40.0f;
@@ -270,11 +271,13 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		else if (wParam == 0x34) { //4 scare 
 			face = 4;
 		}
-		else if (wParam == 0x21) { //pageup
-		zoom += 1;
+		else if (wParam == VK_F1) { //pageup
+		if(zoom <7)
+			zoom += 0.25;
 		}
-		else if (wParam == 0x22) { //pagedowm
-		zoom -= 1;
+		else if (wParam == VK_F2) { //pagedowm
+		if(zoom>6)
+			zoom -= 0.25;
 		}
 		break;
 	case WM_MOUSEMOVE:
@@ -294,6 +297,17 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			rotateCam -= 5.0f;
 
 		return 0;
+		break;
+	case WM_MOUSEWHEEL:
+		temp = GET_WHEEL_DELTA_WPARAM(wParam);
+		if (temp ==120) {
+			if (zoom < 7)
+				zoom += 0.25;
+		}
+		else{
+			if (zoom > 6)
+				zoom -= 0.25;
+		}
 		break;
 	default:
 		break;
@@ -1411,6 +1425,10 @@ void light() {
 
 void display()
 {
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glOrtho(-zoom, zoom, -zoom, zoom, -zoom, zoom);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.196078f, 0.6f, 0.8f, 1.0f);
@@ -1514,10 +1532,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(-zoom, zoom, -zoom, zoom, -zoom, zoom);
-	glMatrixMode(GL_MODELVIEW);
+
 	while (true)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
