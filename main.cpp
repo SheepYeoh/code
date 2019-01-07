@@ -86,6 +86,8 @@ float oldMouseY;
 float mouseX;
 float mouseY;
 
+float zoom = 7;
+
 float lightX = 0, lightY = 8, lightZ = -8;
 float a[] = { 1,0,0,0 };
 float d[] = { 1,0,0,0 };
@@ -267,6 +269,12 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		}
 		else if (wParam == 0x34) { //4 scare 
 			face = 4;
+		}
+		else if (wParam == 0x21) { //pageup
+		zoom += 1;
+		}
+		else if (wParam == 0x22) { //pagedowm
+		zoom -= 1;
 		}
 		break;
 	case WM_MOUSEMOVE:
@@ -1508,7 +1516,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-7.0f, 7.0f, -7.0f, 7.0f, -25.0f, 25.0f);
+	glOrtho(-zoom, zoom, -zoom, zoom, -zoom, zoom);
 	glMatrixMode(GL_MODELVIEW);
 	while (true)
 	{
