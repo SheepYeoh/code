@@ -26,6 +26,7 @@ float leftWeaponAngleZ = 0.0f;
 float leftWeaponTranslateX = -1.5f;
 float leftWeaponTranslateY = 2.5f;
 float leftWeaponTranslateZ = -0.5f;
+int temp;
 
 //rightWeapon
 float rightWeaponAngle = -40.0f;
@@ -86,6 +87,8 @@ float oldMouseY;
 float mouseX;
 float mouseY;
 
+float zoom = 7;
+
 float lightX = 0, lightY = 8, lightZ = -8;
 float a[] = { 1,0,0,0 };
 float d[] = { 1,1,0,0 };
@@ -107,7 +110,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			rotateCam += 20;
 
 		}
-		else if (wParam == 0x4D) { //M for angry mode
+		else if (wParam == 'M') { //M for angry mode
 			if (enableAnger) {
 				enableAnger = false;
 				angry = true;
@@ -124,7 +127,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			}
 
 		}
-		else if (wParam == 0x57) { //W for increase leg movement speed
+		else if (wParam == 'W') { //W for increase leg movement speed
 			if (speed < 5) {
 				if (leftlegangle == 0) {
 					if (rightlegangle == 0) {
@@ -133,7 +136,7 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				}
 			}
 		}
-		else if (wParam == 0x53) { //S for decrease leg movement speed
+		else if (wParam == 'S') { //S for decrease leg movement speed
 			if (speed > 0.03) {
 				if (leftlegangle == 0) {
 					if (rightlegangle == 0) {
@@ -142,107 +145,107 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				}
 			}
 		}
-		else if (wParam == 0x41) { //A for raise left arm
+		else if (wParam == 'A') { //A for raise left arm
 			if (lefthandangle >= -80) {
 				lefthandangle -= 20;
 			}
 		}
-		else if (wParam == 0x44) { //D for lower left arm
+		else if (wParam == 'D') { //D for lower left arm
 			if (lefthandangle < 0) {
 				lefthandangle += 20;
 			}
 		}
-		else if (wParam == 0x4A) { //J for raise right arm
+		else if (wParam == 'J') { //J for raise right arm
 			if (righthandangle >= -80) {
 				righthandangle -= 20;
 			}
 		}
-		else if (wParam == 0x4C) { //L for lower right arm
+		else if (wParam == 'L') { //L for lower right arm
 			if (righthandangle < 0) {
 				righthandangle += 20;
 			}
 		}
-		else if (wParam == 0x55) { //U for move left leg forward
+		else if (wParam == 'U') { //U for move left leg forward
 			if (leftlegangle >= 0) {
 				if (speed == 0) {
 					leftlegangle -= 20;
 				}
 			}
 		}
-		else if (wParam == 0x49) { //I for move left leg backward
+		else if (wParam == 'I') { //I for move left leg backward
 			if (leftlegangle < 20) {
 				if (speed == 0) {
 					leftlegangle += 20;
 				}
 			}
 		}
-		else if (wParam == 0x4F) { //O for move right leg forward
+		else if (wParam == 'O') { //O for move right leg forward
 			if (rightlegangle >= 0) {
 				if (speed == 0) {
 					rightlegangle -= 20;
 				}
 			}
 		}
-		else if (wParam == 0x50) { //P for move right leg backward
+		else if (wParam == 'P') { //P for move right leg backward
 			if (rightlegangle < 20) {
 				if (speed == 0) {
 					rightlegangle += 20;
 				}
 			}
 		}
-		else if (wParam == 0x56) { //V for left hand downward
+		else if (wParam == 'V') { //V for left hand downward
 			if (hand1 < 90) {
 				hand1 += 5;
 			}
 
 		}
-		else if (wParam == 0x43) { //C left hand upward
+		else if (wParam == 'C') { //C for left hand upward
 			if (hand1 > -15) {
 				hand1 -= 5;
 			}
 		}
-		else if (wParam == 0x58) { //X for right hand downward
+		else if (wParam == 'X') { //X for right hand downward
 			if (hand2 < 90) {
 				hand2 += 5;
 			}
 		}
-		else if (wParam == 0x5A) { //Z for right hand upward
+		else if (wParam == 'Z') { //Z for right hand upward
 			if (hand2 > -15) {
 				hand2 -= 5;
 			}
 		}
-		else if (wParam == 0x4E) { //B for left hand outward
+		else if (wParam == 'B') { //B for left hand outward
 			if (leftHandUp < 0) {
 				leftHandUp += 5;
 			}
 		}
-		else if (wParam == 0x42) { //N for left hand outward
+		else if (wParam == 'N') { //N for left hand inward
 			if (leftHandUp > -90) {
 				leftHandUp -= 5;
 			}
 		}
-		else if (wParam == 0x47) { //F for right hand outward
+		else if (wParam == 'F') { //F for right hand inward
 			if (rightHandUp < 90) {
 				rightHandUp += 5;
 			}
 		}
-		else if (wParam == 0x46) { //G for right hand outward
+		else if (wParam == 'G') { //G for right hand outward
 			if (rightHandUp > 0) {
 				rightHandUp -= 5;
 			}
 		}
-		else if (wParam == 0x45) { //E decrease claw length
+		else if (wParam == 'E') { //E for increase claw length
 			if (claw < 1.5) {
 				claw += 0.1;
 			}
 		}
-		else if (wParam == 0x51) { //Q for increase claw length
+		else if (wParam == 'Q') { //Q for decrease claw length
 			claw -= 0.1;
 			if (claw < 0.6) {
 				claw = 0.5;
 			}
 		}
-		else if (wParam == 0x52) { //R for reset position
+		else if (wParam == 'R') { //R for reset position
 			angle = 0;
 			lefthandangle = 0;
 			righthandangle = 0;
@@ -256,28 +259,16 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			leftHandUp = 0;
 			rightHandUp = 0;
 		}
-		else if (wParam == 0x31) { //1 normal 
+		else if (wParam == '1') { //1 normal 
 			face = 1;
 		}
-		else if (wParam == 0x32) { //2 smile 
+		else if (wParam == '2') { //2 smile 
 			face = 2;
 		}
-		else if (wParam == 0x33) { //3 sad 
+		else if (wParam == '3') { //3 sad 
 			face = 3;
 		}
-		else if (wParam == 0x34) { //4 scare 
-			face = 4;
-		}
-		else if (wParam == 0x31) { //1 normal 
-			face = 1;
-		}
-		else if (wParam == 0x32) { //2 smile 
-			face = 2;
-		}
-		else if (wParam == 0x33) { //3 sad 
-			face = 3;
-		}
-		else if (wParam == 0x34) { //4 scare 
+		else if (wParam == '4') { //4 scare 
 			face = 4;
 		}
 		else if (wParam == '5') { //5 Move light position up
@@ -306,6 +297,14 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				glDisable(GL_LIGHTING);
 			}
 		}
+		else if (wParam == VK_F1) { //pageup
+			if (zoom <7)
+				zoom += 0.25;
+		}
+		else if (wParam == VK_F2) { //pagedowm
+			if (zoom>6)
+				zoom -= 0.25;
+		}
 
 		break;
 	case WM_MOUSEMOVE:
@@ -325,6 +324,17 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			rotateCam -= 5.0f;
 
 		return 0;
+		break;
+	case WM_MOUSEWHEEL:
+		temp = GET_WHEEL_DELTA_WPARAM(wParam);
+		if (temp == 120) {
+			if (zoom < 7)
+				zoom += 0.25;
+		}
+		else {
+			if (zoom > 6)
+				zoom -= 0.25;
+		}
 		break;
 	default:
 		break;
@@ -1358,8 +1368,8 @@ void angryMode() {
 			blue3B -= freq6 / 1000;
 		}
 
-		if (blue1R <= 0 / 255.0&& blue1G >= 180 / 255.0 && blue1B <= 255 / 255.0 &&
-			blue3R <= 0 / 255.0&& blue3G >= 64 / 255.0 && blue3B <= 255 / 255.0) {
+		if (blue1R <= 0 / 255.0&& blue1G >= 180 / 255.0 && blue1B >= 255 / 255.0 &&
+			blue3R <= 0 / 255.0&& blue3G >= 64 / 255.0 && blue3B >= 255 / 255.0) {
 			enableAnger = true;
 		}
 	}
@@ -1442,6 +1452,10 @@ void light() {
 
 void display()
 {
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glOrtho(-zoom, zoom, -zoom, zoom, -zoom, zoom);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.196078f, 0.6f, 0.8f, 1.0f);
@@ -1545,10 +1559,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(-7.0f, 7.0f, -7.0f, 7.0f, -25.0f, 25.0f);
-	glMatrixMode(GL_MODELVIEW);
+
 	while (true)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
