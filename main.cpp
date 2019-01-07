@@ -26,6 +26,7 @@ float leftWeaponAngleZ = 0.0f;
 float leftWeaponTranslateX = -1.5f;
 float leftWeaponTranslateY = 2.5f;
 float leftWeaponTranslateZ = -0.5f;
+int temp;
 
 //rightWeapon
 float rightWeaponAngle = -40.0f;
@@ -224,14 +225,14 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			}
 		}
 		else if (wParam == 0x47) { //F
-		if (rightHandUp < 90) {
-			rightHandUp += 5;
-		}
+			if (rightHandUp < 90) {
+				rightHandUp += 5;
+			}
 		}
 		else if (wParam == 0x46) { //G
-		if (rightHandUp > 0) {
-			rightHandUp -= 5;
-		}
+			if (rightHandUp > 0) {
+				rightHandUp -= 5;
+			}
 		}
 		else if (wParam == 0x45) { //E
 			if (claw < 1.5) {
@@ -253,42 +254,55 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			speed = 0;
 		}
 		else if (wParam == 0x31) { //normal
-		face = 1;
+			face = 1;
 		}
 		else if (wParam == 0x32) { //smile
-		face = 2;
+			face = 2;
 		}
 		else if (wParam == 0x33) { //sad
-		face = 3;
+			face = 3;
 		}
 		else if (wParam == 0x34) { //scare
-		face = 4;
+			face = 4;
 		}
-		else if (wParam == 0x21) { //pageup
-		zoom += 1;
+		else if (wParam == VK_F1) { //pageup
+		if(zoom <7)
+			zoom += 0.25;
 		}
-		else if (wParam == 0x22) { //pagedowm
-		zoom -= 1;
+		else if (wParam == VK_F2) { //pagedowm
+		if(zoom>6)
+			zoom -= 0.25;
 		}
 		break;
-		case WM_MOUSEMOVE:
-			// save old mouse coordinates
-			oldMouseX = mouseX;
-			oldMouseY = mouseY;
+	case WM_MOUSEMOVE:
+		// save old mouse coordinates
+		oldMouseX = mouseX;
+		oldMouseY = mouseY;
 
-			// get mouse coordinates from Windows
-			mouseX = LOWORD(lParam);
-			mouseY = HIWORD(lParam);
+		// get mouse coordinates from Windows
+		mouseX = LOWORD(lParam);
+		mouseY = HIWORD(lParam);
 
-			// these lines limit the camera's range
+		// these lines limit the camera's range
 
-			if ((mouseX - oldMouseX) > 0)		// mouse moved to the right
-				rotateCam += 5.0f;
-			else if ((mouseX - oldMouseX) < 0)	// mouse moved to the left
-				rotateCam -= 5.0f;
+		if ((mouseX - oldMouseX) > 0)		// mouse moved to the right
+			rotateCam += 5.0f;
+		else if ((mouseX - oldMouseX) < 0)	// mouse moved to the left
+			rotateCam -= 5.0f;
 
-			return 0;
-			break;
+		return 0;
+		break;
+	case WM_MOUSEWHEEL:
+		temp = GET_WHEEL_DELTA_WPARAM(wParam);
+		if (temp ==120) {
+			if (zoom < 7)
+				zoom += 0.25;
+		}
+		else{
+			if (zoom > 6)
+				zoom -= 0.25;
+		}
+		break;
 	default:
 		break;
 	}
@@ -978,11 +992,11 @@ void head() {
 	if (face == 1) {
 		glPushMatrix();
 		glTranslatef(0, 1.9, 3.35);
-		glColor3f(1,1,1);
+		glColor3f(1, 1, 1);
 		glLineWidth(2);
 		glBegin(GL_LINES);
-		glVertex2f(0.5,0);
-		glVertex2f(-0.5,0);
+		glVertex2f(0.5, 0);
+		glVertex2f(-0.5, 0);
 		glEnd();
 		glPopMatrix();
 	}
@@ -996,7 +1010,7 @@ void head() {
 		double r = 0.8;
 		double start_angle = 4;
 		double end_angle = 5.4;
-		double max_angle = 2 * (22/7.0);
+		double max_angle = 2 * (22 / 7.0);
 		double angle_increment = (22 / 7.0) / 1000;
 		for (double theta = start_angle; theta < end_angle; theta += angle_increment)
 		{
@@ -1050,7 +1064,7 @@ void head() {
 		glEnd();
 		glPopMatrix();
 	}
-	
+
 }
 
 void leftMissile() {
@@ -1247,7 +1261,7 @@ void angryMode() {
 
 void floor() {
 	glPushMatrix();
-	glTranslatef(-23,-6,-23);
+	glTranslatef(-23, -6, -20);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear background colour (default : black)
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -1266,13 +1280,13 @@ void floor() {
 	glBegin(GL_QUADS);
 	//face1
 	glTexCoord2f(0.0, 1.0);
-	glVertex3f(0,0,0);
+	glVertex3f(0, 0, 0);
 	glTexCoord2f(1.0, 1.0);
-	glVertex3f(0,0, 50);
+	glVertex3f(0, 0, 50);
 	glTexCoord2f(1.0, 0.0);
-	glVertex3f(50,0, 50);
+	glVertex3f(50, 0, 50);
 	glTexCoord2f(0.0, 0.0);
-	glVertex3f(50,0, 0);
+	glVertex3f(50, 0, 0);
 
 	glEnd();
 
@@ -1295,6 +1309,10 @@ void light() {
 
 void display()
 {
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glOrtho(-zoom, zoom, -zoom, zoom, -zoom, zoom);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.196078f, 0.6f, 0.8f, 1.0f);
@@ -1395,10 +1413,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int nCmdShow)
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(-zoom, zoom, -zoom, zoom, -zoom, zoom);
-	glMatrixMode(GL_MODELVIEW);
+
 	while (true)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
